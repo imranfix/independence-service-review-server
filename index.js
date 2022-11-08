@@ -18,13 +18,16 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try{
-        const userCollection = client.db('Immigration').collection('users');
-        const user ={
-            name: 'canada',
-            email: 'ca22@gmail.com'
-        }
-        const result = await userCollection.insertOne(user);
-        console.log(result);
+        const serviceCollection = client.db('Immigration').collection('users');
+        
+        // get Read data:
+        app.get('/services', async(req, res) =>{
+            const query = {};
+            const cursor = serviceCollection.find(query);
+            const services = await cursor.limit(3).toArray();
+            res.send(services);
+        })
+       
     }
     finally{
 
