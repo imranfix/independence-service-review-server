@@ -66,11 +66,25 @@ async function run() {
             res.send(orders);
         });
 
-        // 6. delete
+        // 6. delete operation route:
         app.delete( '/orders/:id', async(req, res) =>{
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await orderCollection.deleteOne(query);
+            res.send(result);
+        });
+
+        // 7. Update operation change status:
+        app.patch('/orders/:id', async(req, res) =>{
+            const id = req.params.id;
+            const status = req.body.status
+            const query = { _id: ObjectId(id) }
+            const updateDoc = {
+                $set: {
+                    status: status
+                }
+            }
+            const result = await orderCollection.updateOne(query, updateDoc);
             res.send(result);
         })
 
