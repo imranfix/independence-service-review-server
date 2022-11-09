@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 const port = process.env.PORT || 5000;
 
 
-// middle wares:
+// middle wares setUp:
 app.use(cors());
 app.use(express.json());
 
@@ -19,8 +19,9 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try{
         const serviceCollection = client.db('Immigration').collection('users');
+        const orderCollection = client.db('Immigration').collection('orders');
         
-        // get Read data:
+        //1. services data Read with get (operation):
         app.get('/services', async(req, res) =>{
             const query = {};
             const cursor = serviceCollection.find(query);
@@ -28,13 +29,29 @@ async function run() {
             res.send(services);
         });
 
-        // get Read data for sell all page: 
+        //2. get Read data for see-all page: 
         app.get('/serviceAll', async(req, res) =>{
             const query = {};
             const cursor = serviceCollection.find(query);
             const services = await cursor.toArray();
             res.send(services);
         });
+
+        // 3. dynamic service route and get read data:
+        app.get('/services/:id', async(req, res) =>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const service = await serviceCollection.findOne(query);
+            res.send(service);
+        });
+
+        // orders data Create with post (operation):
+        app.post('/orders', async(req, res) =>{
+            const order = req.body;
+            const result = await orderCollection.insertOne(order);
+            res.send(result);
+        })
+
 
        
     }
