@@ -60,6 +60,7 @@ async function run() {
             res.send(services);
         });
 
+
         //2. get Read data for see-all page: 
         app.get('/serviceAll', async(req, res) =>{
             const query = {};
@@ -67,6 +68,7 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         });
+
 
         // 3. dynamic service route and get read data:
         app.get('/services/:id', async(req, res) =>{
@@ -76,12 +78,14 @@ async function run() {
             res.send(service);
         });
 
+
         // 4. orders data Create with post (operation):
         app.post('/orders', verificationJWT ,async(req, res) =>{
             const order = req.body;
             const result = await orderCollection.insertOne(order);
             res.send(result);
         });
+
 
         // 5. call orders data from the databse and read data + JWT Token:
         app.get('/orders', verificationJWT , async(req, res) =>{
@@ -102,6 +106,7 @@ async function run() {
             res.send(orders);
         });
 
+
         // 6. delete operation route:
         app.delete( '/orders/:id', verificationJWT ,async(req, res) =>{
             const id = req.params.id;
@@ -109,6 +114,7 @@ async function run() {
             const result = await orderCollection.deleteOne(query);
             res.send(result);
         });
+
 
         // 7. Update operation change status:
         app.patch('/orders/:id', verificationJWT , async(req, res) =>{
@@ -123,12 +129,10 @@ async function run() {
             const result = await orderCollection.updateOne(query, updateDoc);
             res.send(result);
         });
-
       
-
-
        
     }
+
     finally{
 
     }
@@ -138,7 +142,7 @@ run().catch(err =>console.log(err))
 
 
 
-// test route:
+// test route server:
 app.get('/', (req, res) =>{
     res.send('New Immigration server is running');
 });
