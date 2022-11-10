@@ -41,6 +41,7 @@ async function run() {
     try{
         const serviceCollection = client.db('Immigration').collection('users');
         const orderCollection = client.db('Immigration').collection('orders');
+        const reviewCollection = client.db('Immigration').collection('reviews');
 
 
           // 8. Jwt token:
@@ -134,7 +135,7 @@ async function run() {
         app.get('reviews/:id', async(req, res) =>{
             const id = req.params.id
             const query = {_id: ObjectId(id) };
-            const review = await orderCollection.findOne(query);
+            const review = await reviewCollection.findOne(query);
             res.send(review);
         });
         // ----------------------
