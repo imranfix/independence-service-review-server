@@ -129,6 +129,16 @@ async function run() {
             const result = await orderCollection.updateOne(query, updateDoc);
             res.send(result);
         });
+
+        //9. Edit/Update review:
+        app.get('reviews/:id', async(req, res) =>{
+            const id = req.params.id
+            const query = {_id: ObjectId(id) };
+            const review = await orderCollection.findOne(query);
+            res.send(review);
+        });
+        // ----------------------
+
       
        
     }
